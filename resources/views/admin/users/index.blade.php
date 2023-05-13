@@ -46,7 +46,8 @@
                     <th></th>
 
                     <th></th>
-                    <th></th>
+
+                    <th><input type="text" placeholder="Search Distance" /></th>
                     <th></th>
 
                     <th><input type="text" placeholder="YYYY-MM-DD" /></th>

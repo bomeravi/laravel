@@ -18,6 +18,7 @@ class UsersController extends Controller
     public function ajax_users(Request $request){
 
         $requestData = $request->all();
+        $gender = $requestData['columns'][3]['search']['value'];
         $age_range = $requestData['columns'][4]['search']['value'];
         $distance = $requestData['columns'][5]['search']['value'];
         if(empty($distance)){
@@ -33,48 +34,37 @@ class UsersController extends Controller
             $max_age = $datas[2];
 
         }
-            $model = User::select('id','name','email','gender','age','user_type','created_at')->with('location')->where('user_role', '!=', 'admin')->where('age' ,'>=', $min_age)->where('age','<=', $max_age);
-            $lat = 0;
-            $lng = 0;
+        $lat = 0;
+        $lng = 0;
 
+            $model = User::select('users.id','users.name', 'users.email','users.user_type','users.age','users.created_at','users.gender',
+                \DB::raw('(SQRT(POWER(( '. $lat.'-user_locations.lat),2)+POWER(( '. $lng.'-user_locations.lng),2)) ) AS distance')
+            )
+                ->join('user_locations', 'users.id', '=', 'user_locations.user_id')
+                ->where('users.user_role', '!=', 'admin')
+                ->where('users.age' ,'>=', $min_age)
+                ->where('users.age','<=', $max_age);
 
-
+            $model->having('distance','<=', $distance);
 
 
 
             return DataTables::eloquent($model)
-                ->addColumn('distance', function (User $user) use ($lng, $lat) {
-                    //return  $user->location->lat;
-                   // number_format( $myNumber, 2, '.', '' );
-                   //return \DB::raw('SELECT SQRT(POWER(5,2)+POWER(5,2)) as distance' );
-                   return number_format(SQRT(POW((  $lat-$user->location->lat),2)+POW((  $lng-$user->location->lng),2)) , 2, '.', '' );
-                })
-                ->filterColumn('gender', function($query, $keyword) {
+                ->filterColumn('gender',function($query, $keyword) {
                     $query->where('gender', $keyword);
                 })
-//                ->filterColumn('distance', function($query, $keyword) use ($distance) {
-//                    $query->having('distance','>', $distance);
-//                })
                 ->filterColumn('age',function($query, $keyword) {
+
                 })
+                ->filterColumn('distance',function($query, $keyword) {
+
+                })
+
+
                 ->editColumn('created_at' , function(User $user) {
-                    return $user->created_at->format('Y-m-d');
+                    return $user->created_at;
                 })
 
-
-
-
-                //->filter(function ($query) {
-
-                  //  function ($instance) use ($request)
-                   // if (request()->has('distance')) {
-                        //return request('distance');
-
-//                        $query->having('distance', "<=",   request('distance') );
-                   // }
-
-                //},true)
                 ->toJson();
-                //->make(false);
     }
 }
