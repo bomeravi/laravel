@@ -23,7 +23,7 @@ class DatabaseSeeder extends Seeder
             'gender' => 'male',
         ]);
 
-         \App\Models\User::factory(10)->create()->each(function ($user) {
+         \App\Models\User::factory(10000)->create()->each(function ($user) {
              $user->location()->save(UserLocation::factory()->make());
          });;
 
