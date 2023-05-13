@@ -43,11 +43,11 @@
                     <th><input type="text" placeholder="Search Id" /></th>
                     <th><input type="text" placeholder="Search Name" /></th>
                     <th><input type="text" placeholder="Search Email" /></th>
-                    <th><input type="text" placeholder="Search Gender" /></th>
+                    <th></th>
 
                     <th></th>
-                    <th><input type="text" placeholder="Search Distance Range" /></th>
-                    <th><input type="text" placeholder="UserType" /></th>
+                    <th></th>
+                    <th></th>
 
                     <th><input type="text" placeholder="YYYY-MM-DD" /></th>
 

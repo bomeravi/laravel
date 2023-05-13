@@ -52,9 +52,9 @@ class UsersController extends Controller
                 ->filterColumn('gender', function($query, $keyword) {
                     $query->where('gender', $keyword);
                 })
-                ->filterColumn('distance', function($query, $keyword) use ($distance) {
-                    $query->having('distance','>', $distance);
-                })
+//                ->filterColumn('distance', function($query, $keyword) use ($distance) {
+//                    $query->having('distance','>', $distance);
+//                })
                 ->filterColumn('age',function($query, $keyword) {
                 })
                 ->editColumn('created_at' , function(User $user) {
